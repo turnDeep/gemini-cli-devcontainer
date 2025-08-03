@@ -1,0 +1,112 @@
+{
+  "name": "Gemini CLI Development Container",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+  
+  // Features to add to the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // This is needed for OAuth redirect callback
+  "forwardPorts": [3000, 3002, 5000, 8080],
+  
+  // Port label for easier identification
+  "portsAttributes": {
+    "3000": {
+      "label": "OAuth Callback",
+      "onAutoForward": "notify"
+    },
+    "3002": {
+      "label": "OAuth Callback Alt",
+      "onAutoForward": "notify"
+    },
+    "5000": {
+      "label": "Google OAuth Callback",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Dev Server",
+      "onAutoForward": "notify"
+    }
+  },
+
+  // Run commands after the container is created
+  "postCreateCommand": "npm install -g @google/gemini-cli && echo '✅ Gemini CLI installed successfully!' && gemini --version",
+  
+  // Configure tool-specific properties
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "mikestead.dotenv",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        },
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "files.autoSave": "afterDelay"
+      }
+    }
+  },
+
+  // Environment variables - These will be available in the container
+  "containerEnv": {
+    // Uncomment and set your API key if you want to use API key authentication
+    // "GEMINI_API_KEY": "your-api-key-here",
+    // "GOOGLE_API_KEY": "your-google-api-key-here",
+    // "GOOGLE_CLOUD_PROJECT": "your-project-id",
+    
+    // Enable color output in terminal
+    "FORCE_COLOR": "1",
+    "NODE_ENV": "development",
+    
+    // Set default model (optional)
+    "GEMINI_MODEL": "gemini-2.5-pro"
+  },
+
+  // Mount local .env file if it exists
+  "mounts": [
+    "source=${localEnv:HOME}/.gemini,target=/home/node/.gemini,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/.env,target=/workspace/.env,type=bind,consistency=cached,optional=true"
+  ],
+
+  // Set the default user
+  "remoteUser": "node",
+  
+  // Add capabilities for browser authentication
+  "runArgs": [
+    "--cap-add=SYS_PTRACE",
+    "--security-opt",
+    "seccomp=unconfined",
+    "--network=host"
+  ],
+
+  // Uncomment to connect as root instead
+  // "remoteUser": "root",
+
+  // Features for better development experience
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "nodeGypDependencies": true
+    }
+  }
+}
