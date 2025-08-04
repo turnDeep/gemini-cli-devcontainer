@@ -85,7 +85,7 @@
   // Mount local .env file if it exists
   "mounts": [
     "source=${localEnv:HOME}/.gemini,target=/home/node/.gemini,type=bind,consistency=cached",
-    "source=${localWorkspaceFolder}/.env,target=/workspace/.env,type=bind,consistency=cached,optional=true"
+    "source=${localWorkspaceFolder}/.env,target=/workspace/.env,type=bind,consistency=cached"
   ],
 
   // Set the default user
