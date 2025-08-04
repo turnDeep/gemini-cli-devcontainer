@@ -1,7 +1,7 @@
 {
   "theme": "GitHub",
   "autoAccept": false,
-  "sandbox": "docker",
+  "sandbox": false,
   "checkpointing": {
     "enabled": true
   },
